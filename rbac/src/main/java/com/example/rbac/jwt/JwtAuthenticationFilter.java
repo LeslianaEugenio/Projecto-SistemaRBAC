@@ -1,4 +1,4 @@
-package com.example.rbac.security;
+package com.example.rbac.jwt;
 
 import com.example.rbac.config.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
@@ -15,6 +15,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+/*
+Classe JwtAuthenticationFilter: Filtro que intercepta todas as requisições HTTP para verificar
+  se o token JWT está presente e é válido.
+Responsabilidades:
+  - Extrair o token do cabeçalho "Authorization".
+  - Validar o token usando JwtProvider.
+  - Autenticar o usuário no contexto do Spring Security.
+ */
+
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -45,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // carrega UserDetails (pode lançar UsernameNotFoundException - deixa propagar se desejar)
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                // monta a autenticação com as authorities do usuário
+                // monta a autenticação com as autorizações do usuário
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 

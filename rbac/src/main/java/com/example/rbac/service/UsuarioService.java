@@ -11,63 +11,71 @@ import org.springframework.stereotype.Service; // bean de serviço
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+/*
+Classe UserService: Serviço responsável pela lógica de negócio relacionada aos usuários.
+  Responsabilidades:
+  - Criar, atualizar e desativar usuários.
+  - Buscar usuários por email ou ID.
+  - Integrar com o UserRepository e o RoleRepository.
+ */
+
 
 @Service // registra bean
 public class UsuarioService {
 
     @Autowired
-    private UsuarioRepositorio userRepository; // repo para user
+    private UsuarioRepositorio usuarioRepositorio; // repo para usuário
 
     @Autowired
-    private RoleRepositorio roleRepository; // repo para role
+    private RoleRepositorio roleRepositorio; // repo para role
 
     @Autowired
-    private PasswordEncoder passwordEncoder; // encoder BCrypt
+    private PasswordEncoder passwordCodificada; // codificação BCrypt
 
     // cria novo usuário com role USER por padrão
-    public Usuario registerUser(String name, String email, String rawPassword) {
-        Usuario user = new Usuario();
-        user.setNome(name);
-        user.setEmail(email);
-        user.setSenha(passwordEncoder.encode(rawPassword)); // hash da senha
-        user.setActiva(true);
+    public Usuario registroUsuario(String name, String email, String rawPassword) {
+        Usuario usuario = new Usuario();
+        usuario.setNome(name);
+        usuario.setEmail(email);
+        usuario.setSenha(passwordCodificada.encode(rawPassword)); // hash da senha
+        usuario.setActiva(true);
 
         // busca role ROLE_USER e atribui
-        Role userRole = roleRepository.findByName("ROLE_USUÁRIO")
+        Role userRole = roleRepositorio.findByNome("ROLE_USUÁRIO")
                 .orElseThrow(() -> new RuntimeException("Papel de usuário não encontrado"));
         Set<Role> roles = new HashSet<>();
         roles.add(userRole);
-        user.setRoles(roles);
+        usuario.setRoles(roles);
 
-        return userRepository.save(user); // salva no BD
+        return usuarioRepositorio.save(usuario); // salva no BD
     }
 
     public Optional<Usuario> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return usuarioRepositorio.findByEmail(email);
     }
 
     public Optional<Usuario> findById(Long id) {
-        return userRepository.findById(id);
+        return usuarioRepositorio.findById(id);
     }
 
     // lista todos os usuários
     public java.util.List<Usuario> findAll() {
-        return userRepository.findAll();
+        return usuarioRepositorio.findAll();
     }
 
     // ativa ou desativa usuário
     public Usuario setActiva(Long userId, boolean active) {
-        Usuario user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        Usuario user = usuarioRepositorio.findById(userId).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         user.setActiva(active);
-        return userRepository.save(user);
+        return usuarioRepositorio.save(user);
     }
 
     // atribui role a um usuário
     public Usuario addRoleToUser(Long userId, String roleName) {
-        Usuario user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        Role role = roleRepository.findByName(roleName).orElseThrow(() -> new RuntimeException("Role not found"));
-        user.getRoles().add(role);
-        return userRepository.save(user);
+        Usuario usuario = usuarioRepositorio.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Role role = roleRepositorio.findByNome(roleName).orElseThrow(() -> new RuntimeException("Role not found"));
+        usuario.getRoles().add(role);
+        return usuarioRepositorio.save(usuario);
     }
 }
 

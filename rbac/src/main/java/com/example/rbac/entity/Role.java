@@ -2,6 +2,15 @@ package com.example.rbac.entity;
 
 
 import jakarta.persistence.*;
+/*
+  Classe Role: Representa um papel dentro do sistema (ex: ADMIN, MANAGER, USER).
+  É utilizada pelo RBAC (Role-Based Access Control) para definir permissões.
+ Responsabilidades:
+  - Definir e armazenar o nome do papel.
+  - Manter a relação com os usuários.
+  - Servir como entidade para controle de autorização.
+ */
+
 
 @Entity //marca a classe como entitidade JPA
 @Table(name = "roles")//nome da tabela no banco de dados

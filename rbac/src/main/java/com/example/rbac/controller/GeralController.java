@@ -4,7 +4,7 @@ import com.example.rbac.dto.JwtResponse; // DTO token
 import com.example.rbac.dto.LoginRequest; // DTO login
 import com.example.rbac.dto.RegisterRequest; // DTO register
 import com.example.rbac.entity.Usuario; // entidade User
-import com.example.rbac.security.JwtProvider; // provider JWT
+import com.example.rbac.jwt.JwtProvider; // provider JWT
 import com.example.rbac.service.UsuarioService; // serviço User
 import org.springframework.beans.factory.annotation.Autowired; // injeção
 import org.springframework.http.ResponseEntity; // respostas HTTP
@@ -13,8 +13,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication; // autenticação
 import org.springframework.web.bind.annotation.*; // anotações REST
 
+/*
+  Classe ControleGeral: Controlador responsável por endpoints de autenticação (login e registro).
+  Responsabilidades:
+  - Receber credenciais de login e retornar o token JWT.
+  - Cadastrar novos usuários no sistema.
+ */
+
+
 @RestController // controlador REST
-@RequestMapping("/auth") // rota base /auth
+@RequestMapping("/geral") // rota base /geral
 public class  GeralController  {
 
     @Autowired
@@ -26,15 +34,15 @@ public class  GeralController  {
     @Autowired
     private UsuarioService userService; // para registrar usuário
 
-    // endpoint POST /auth/register para criar novo usuário
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest body) {
-        // cria usuário e retorna 200 com os dados (podes mudar para 201)
-        Usuario user = userService.registerUser(body.getNome(), body.getEmail(), body.getSenha());
-        return ResponseEntity.ok(user);
+    // endpoint POST /geral/registro para criar novo usuário
+    @PostMapping("/registro")
+    public ResponseEntity<?> registro(@RequestBody RegisterRequest body) {
+        // cria usuário e retorna 200 com os dados
+        Usuario usuario = userService.registroUsuario(body.getNome(), body.getEmail(), body.getSenha());
+        return ResponseEntity.ok(usuario);
     }
 
-    // endpoint POST /auth/login para autenticar e retornar token JWT
+    // endpoint POST /geral/login para autenticar e retornar token JWT
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         // autentica usando AuthenticationManager; se falhar, é lançada exceção

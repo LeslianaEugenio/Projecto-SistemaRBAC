@@ -1,6 +1,14 @@
 package com.example.rbac.dto;
 
 import lombok.Setter;
+/*DTO que representa os dados enviados para registrar um novo usuário.
+  Campos:
+  - nome
+  - email
+  - senha
+  - roles (opcional)
+ */
+
 
 public class RegisterRequest {
     private String nome; //

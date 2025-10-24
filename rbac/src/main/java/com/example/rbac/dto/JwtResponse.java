@@ -1,4 +1,11 @@
 package com.example.rbac.dto;
+/*DTO que representa a resposta enviada após o login.
+  Campos:
+ - token JWT
+ - tipo de token (Bearer)
+
+ */
+
 
 public class JwtResponse {
     private String token; // token JWT
